@@ -1,0 +1,1999 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Catallaxy Services | Perfectly Normal</title>
+
+		<link rel="stylesheet" href="../reveal.js/dist/reset.css">
+		<link rel="stylesheet" href="../reveal.js/dist/reveal.css">
+		<link rel="stylesheet" href="../reveal.js/dist/theme/black.css" id="theme">
+		<link rel="stylesheet" href="../WebsiteAssets/mods.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="../reveal.js/plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h2>Perfectly Normal</h2>
+					<h3>An Advanced Primer on Normalization</h3>
+					
+					<a href="https://www.catallaxyservices.com">Kevin Feasel</a> (<a href="https://twitter.com/feaselkl">@feaselkl</a>)<br />
+					<a href="http://CSmore.info/on/dbdesign">http://CSmore.info/on/dbdesign</a>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Who Am I?  What Am I Doing Here?</h3>
+					<div class="container">
+						<div class="col">
+							<table class="whoami">
+								<tr>
+									<td><a href="https://csmore.info"><img src="../WebsiteAssets/Logo.png" height="100" /></a></td>
+									<td nowrap><a href="https://csmore.info">Catallaxy Services</a></td>
+								</tr>
+								<tr>
+									<td><a href="https://curatedsql.com"><img src="../WebsiteAssets/CuratedSQLLogo.png" height="100" /></a></td>
+									<td nowrap><a href="https://curatedsql.com">Curated SQL</a></td>
+								</tr>
+								<tr>
+									<td><a href="https://www.apress.com/us/book/9781484254608"><img src="../WebsiteAssets/PolyBaseRevealed.png" height="120" /></a></td>
+									<td nowrap><a href="https://www.apress.com/us/book/9781484254608">PolyBase Revealed</a></td>
+								</tr>
+							</table>
+						</div>
+						<div class="col">
+							<a href="http://www.twitter.com/feaselkl"><img src="../WebsiteAssets/HeadShot.jpg" height="358" width="315" /></a>
+							<br />
+							<a href="http://www.twitter.com/feaselkl">@feaselkl</a>
+						</div>					
+					</div>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/questions.jpg" data-background-opacity="0.2">
+					<h3>Is This Talk Right for Me?</h3>
+					
+					<p>Have you ever believed any of the following?</p>
+					
+					<ul>
+						<li class="fragment">"Normalization isn't relevant in the business world."</li>
+						<li class="fragment">"Normalize until it hurts, denormalize until it works."</li>
+						<li class="fragment">"The main purpose of normalization is to minimize disk utilization by removing duplicate data."</li>
+						<li class="fragment">"Database design doesn't matter--add more hardware and that will fix the problem."</li>
+						<li class="fragment">"Getting to Third Normal Form is all you need to know about normalization."</li>
+						<li class="fragment">"Third Normal Form is important."</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/motivation.jpg" data-background-opacity="0.2">
+					<h3>Motivation</h3>
+					
+					<p>My goals in this talk:</p>
+					
+					<ul>
+						<li>Explain the basics behind database normalization.</li>
+						<li>Dive into the two most important normal forms.</li>
+						<li>Briefly cover other interesting normal forms.</li>
+						<li>Cover critiques of normalization.</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/caution.jpg" data-background-opacity="0.2">
+					<h3>A Brief Warning</h3>
+					
+					<p>Normalization is a part of relational theory, meaning that there will be math and there will be discussions of formal logic.</p>
+
+					<p>I will do my best to minimize the learning curve, but we're ultimately solving math problems using logical analysis.</p>
+					
+					<p>Also, some of these normal forms are not well-understood outside of academic circles and so your interpretation of the forms may not match what I'm going to describe.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Source</h3>
+					
+					<p>The source of most of today's talk is <a href="https://www.apress.com/us/book/9781484255391">C.J. Date's Database Design and Relational Theory, 2nd Edition</a> (Apress, 2019).</p>
+
+					<img src="presentation/assets/image/DatabaseDesignCover.jpg" height="450" />
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li class="active">The Basics</li>
+						<li>1NF</li>
+						<li>BCNF</li>
+						<li>5NF</li>
+						<li>4NF</li>
+						<li>6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/rulers.jpg" data-background-opacity="0.2">
+					<h3>What is Normalization?</h3>
+					
+					<p>Normalization is a set of logical rules and processes to follow.</p>
+					
+					<p>Normalization works off of a <strong>logical</strong> data model.  From there, we can (theoretically) adapt to a <strong>physical</strong> data model for implementation.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Quick Primer on Terminology</h3>
+					
+					<p>We're used to thinking in terms of tables, rows, and columns.  Let's take a step back and talk about the data modeling terms.</p>
+					
+					<img src="presentation/assets/image/Terminology.png" height="425" />
+				</section>
+				
+				<section data-background-image="presentation/assets/background/goals.jpg" data-background-opacity="0.2">
+					<h3>Goals of Normalization</h3>
+					
+					<ul>
+						<li>Remove <strong>redundant</strong> data</li>
+						<li>Fix <strong>incorrect designs</strong></li>
+						<li>Achieve a design which is a <strong>good representation of the real world</strong></li>
+						<li>Simplify the statement and enforcement of certain <strong>integrity constraints</strong></li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Normal Forms</h3>
+					
+					<p>From a talk I used to deliver:</p>
+
+					<img src="presentation/assets/image/OldNormalizationPyramid.png" />
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Normal Forms</h3>
+					
+					<img src="presentation/assets/image/NormalForms.png" />
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Normal Forms We Will Care About</h3>
+					
+					<img src="presentation/assets/image/ImportantNormalForms.png" />
+				</section>
+				
+				<section data-background-image="presentation/assets/background/tags.jpg" data-background-opacity="0.2">
+					<h3>Normal Forms Ranked by Importance</h3>
+					
+					<ul>
+						<li class="fragment">Most important:  BCNF, 5NF</li>
+						<li class="fragment">Sometimes important:  6NF</li>
+						<li class="fragment">Overrated:  1NF, 4NF</li>
+						<li class="fragment">Rarely relevant:  EKNF, ETNF, RFNF, SKNF, Overstrong PJ/NF</li>
+						<li class="fragment">Never relevant:  2NF, 3NF</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li class="active">1NF</li>
+						<li>BCNF</li>
+						<li>5NF</li>
+						<li>4NF</li>
+						<li>6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>What 1NF Is</h3>
+					
+					<p>First normal form (1NF) is all about key rules and the shape of tuples.</p>
+					
+					<blockquote>
+						Given relvar R with heading H containing attributes A1...An of types T1...Tn, all tuples follow heading H and have one value of type Ti for attribute Ai.
+					</blockquote>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>In Other Words</h3>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>UserName (CHAR)</th>
+								<th>Password (BINARY)</th>
+								<th>IsActive (BIT)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Bob</td>
+								<td>0xABC123</td>
+								<td>1</td>
+							</tr>
+							<tr>
+								<td>Jane</td>
+								<td>0xCDA331</td>
+								<td>1</td>
+							</tr>
+							<tr>
+								<td>Marcus</td>
+								<td>0xFFF048</td>
+								<td>0</td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<p>Adding a new tuple <code>t(Jim, 0xBBA492, 1)</code> requires that the new tuple's heading, with attributes and types, matches the existing relvar's heading.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/rulers.jpg" data-background-opacity="0.2">
+					<h3>The Rules on 1NF</h3>
+					
+					<p>First normal form (1NF) has a few rules:</p>
+					
+					<ul>
+						<li>New tuples match the existing relvar's heading.</li>
+						<li class="fragment">All tuples must have <strong>values</strong> for all attributes.  This means NULL violates 1NF!</li>
+						<li class="fragment">No duplicate tuples are allowed</li>
+						<li class="fragment">Attribute order does not matter for tuples</li>
+						<li class="fragment">Tuple order does not matter for relations</li>
+						<li class="fragment">All attributes are <strong>regular</strong>:  they have a name, a type, are not hidden, etc.</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/monkey-thinking.jpg" data-background-opacity="0.2">
+					<h3>Repeating Groups</h3>
+					
+					<p>Quite commonly, depictions of 1NF will discuss the concept of "repeating groups."</p>
+					
+					<p>An example of a relvar with a repeating group is:</p>
+
+					<p><code>R = (Name, Phone1, Phone2, Phone3)</code></p>
+					
+					<p>Is this in 1NF?</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<p>From a talk I used to deliver:</p>
+
+					<img src="presentation/assets/image/1NFWrong.png" height="500" />
+				</section>
+				
+				<section data-background-image="presentation/assets/background/repetition.jpg" data-background-opacity="0.2">
+					<h3>What We Know That Just Isn't So</h3>
+					
+					<p><code>R = (Name, Phone1, Phone2, Phone3)</code></p>
+					
+					<p>The answer is <strong>YES!</strong>  This relvar <strong>is</strong> in 1NF!</p>
+					
+					<p>"Repeating groups" is a term Date came up with and has subsequently recanted.  The term itself was confusing and the above interpretation is something he did not intend.  His latest advice is to ignore any reference to repeating groups.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/table.jpg" data-background-opacity="0.2">
+					<h3>Are SQL Tables in 1NF?</h3>
+					
+					<p>SQL tables can be in 1NF.</p>
+					
+					<p class="fragment">Also, SQL tables are trivially not in 1NF because they can't otherwise be.</p>
+					
+					<ul>
+						<li class="fragment">New tuples match the existing relvar's heading.</li>
+						<li class="fragment"><p class="fragment highlight-current-red">All tuples must have <strong>values</strong> for all attributes.  NULL violates 1NF!</p></li>
+						<li class="fragment"><p class="fragment highlight-current-red">No duplicate tuples are allowed</p></li>
+						<li class="fragment"><p class="fragment highlight-red">Attribute order does not matter for tuples</p></li>
+						<li class="fragment">Tuple order does not matter for relations</li>
+						<li class="fragment"><p class="fragment highlight-current-red">All attributes are <strong>regular</strong>:  they have a name, a type, are not hidden, etc.</p></li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li>1NF</li>
+						<li class="active">BCNF</li>
+						<li>5NF</li>
+						<li>4NF</li>
+						<li>6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Importance of BCNF</h3>
+					
+					<p>Boyce-Codd Normal Form is one of the two most important normal forms.  It prevents a variety of <strong>data anomalies</strong>:</p>
+					
+					<ul>
+						<li>Update anomalies</li>
+						<li>Redundant data (some types)</li>
+						<li>Missing data</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>We Have Data</h3>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Specialist</th>
+								<th>Project</th>
+								<th>Task</th>
+								<th>Login</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Julia</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td>JuliaH</td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>Analysis</td>
+								<td>Build spark cluster</td>
+								<td>LindsayM</td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td>LindsayM</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Update Anomalies</h3>
+					
+					<p>Lindsay gets married and changes her last name.  But we miss it in one project.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Specialist</th>
+								<th>Project</th>
+								<th>Task</th>
+								<th>Login</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Julia</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td>JuliaH</td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>Analysis</td>
+								<td>Build spark cluster</td>
+								<td><strong>LindsayJ</strong></td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td><p class="fragment highlight-red">LindsayM</p></td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Redundant Data</h3>
+					
+					<p>Ann comes off the bench to do all the ETL work.  Let's update the database.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Specialist</th>
+								<th>Project</th>
+								<th>Task</th>
+								<th>Login</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><strong>Ann</strong></td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td><strong>AnnB</strong></td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>Analysis</td>
+								<td>Build spark cluster</td>
+								<td>LindsayJ</td>
+							</tr>
+							<tr class="fragment highlight-red">
+								<td><strong>Ann</strong></td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td><strong>AnnB</strong></td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Missing Data</h3>
+					
+					<p>Where was Ann?  How do we make her visible when she's on the bench?</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Specialist</th>
+								<th>Project</th>
+								<th>Task</th>
+								<th>Login</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Julia</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td>JuliaH</td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>Analysis</td>
+								<td>Build spark cluster</td>
+								<td>LindsayJ</td>
+							</tr>
+							<tr>
+								<td>Lindsay</td>
+								<td>ETL</td>
+								<td>Write scripts</td>
+								<td>LindsayJ</td>
+							</tr>
+							<tr class="fragment highlight-red">
+								<td>Ann</td>
+								<td>NONE</td>
+								<td>Placeholder</td>
+								<td>AnnB</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>Boyce-Codd Normal Form Defined</h3>
+					
+					<p>We can define BCNF as:</p>
+					
+					<blockquote>
+						All functional dependencies have superkey determinants.
+					</blockquote>
+					
+					<p class="fragment">Superkey:  a unique combination of attributes, but not necessarily the most parsimonious unique combination of attributes.  If <code>(A1, A2)</code> is a key, <code>(A1)</code> is a <strong>subkey</strong> and <code>(A1, A2, A3)</code> is a <strong>superkey</strong>.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow.jpg" data-background-opacity="0.2">
+					<h3>Functional Dependencies</h3>
+					
+					<p>Suppose we have some attribute Z.</p>
+					<p>The value of Z depends on inputs X and Y:</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>X</th>
+								<th>Y</th>
+								<th>Z</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>4</td>
+								<td>7</td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>5</td>
+								<td>2</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>4</td>
+								<td>7</td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td>8</td>
+								<td>7</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
+					<h3>Functional Dependencies</h3>
+					
+					<p>When we see <code>X=1</code> and <code>Y=4</code>, we know <code>Z=7</code>.</p>
+					
+					<p>In other words, X and Y <strong>determine</strong> Z, or <code>(X, Y)</code> is the <strong>determinant</strong> for Z.</p>
+					
+					<p>In mathematical terms, we can write this as <code>(X, Y) -> Z</code>.
+				</section>
+				
+				<section data-background-image="presentation/assets/background/books-45degree.jpg" data-background-opacity="0.2">
+					<h3>Boyce-Codd Normal Form Reviewed</h3>
+					
+					<blockquote>
+						All functional dependencies have superkey determinants.
+					</blockquote>
+					
+					<ul>
+						<li>Superkey:  key and maybe more.</li>
+						<li>Functional dependency:  strict relationship between attributes.</li>
+						<li>Determinant:  "input(s)" for the functional dependency.</li>
+					</ul>
+					
+					<p>Relvars in BCNF are <strong>guaranteed</strong> to suffer from none of the anomalies we just described!</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/monkey-thinking.jpg" data-background-opacity="0.2">
+					<h3>Finding Determinants</h3>
+					
+					<p>"Deductive" techniques:</p>
+					
+					<ul>
+						<li>Look for common prefixes, such as UserID and UserName</li>
+						<li>Look at what "belongs" to an object, e.g., a password on a User relvar versus a password on a UserLoginAttempt relvar</li>
+						<li>Look for equivalences and mathematical formulas, e.g., SubTotal, Tax, Total</li>
+						<li>Discuss with product owners and stakeholders what things belong together</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/magnifying-glass.jpg" data-background-opacity="0.2">
+					<h3>Finding Determinants</h3>
+					
+					<p>"Inductive" techniques:</p>
+					
+					<ul>
+						<li>Look for common patterns in the data</li>
+						<li>Count of distinct values for attribute combinations</li>
+						<li>Build a correlation matrix for combinations of attributes</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Solution, Step 1</h3>
+					
+					<p>Start with a relvar whose heading has all attributes.  Figure out the candidate key(s) and functional dependencies for this relvar.</p>
+					
+					<div class="container">
+						<div class="col">
+							<img src="presentation/assets/image/dmcampaign.png" height="400" />
+						</div>
+						<div class="col">
+							<table>
+								<tbody>
+									<tr>
+										<td>CampaignID</td>
+										<td>CName, COName, AgencyID, MaxBudget, MinBid</td>
+									</tr>
+									<tr>
+										<td>AgencyID</td>
+										<td>AName, TakeRate</td>
+									</tr>
+									<tr>
+										<td>AudienceTargetID</td>
+										<td>TAgeRng, TGenPref</td>
+									</tr>
+									<tr>
+										<td>CampaignID, AudienceTargetID</td>
+										<td>AudienceBidModifier</td>
+									</tr>
+							</table>
+						</div>					
+					</div>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
+					<h3>The Solution, Step 2</h3>
+					
+					<p>Next, ask this question:  are all determinants candidate keys?  The answer is obviously no.  Only the final determinant is.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Determinant</th>
+								<th>Dependency</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>CampaignID</td>
+								<td>CampaignName, CampaignOwnerName, AgencyID, MaximumDailyBudget, MinimumBid</td>
+							</tr>
+							<tr>
+								<td>AgencyID</td>
+								<td>AgencyName, TakeRate</td>
+							</tr>
+							<tr>
+								<td>AudienceTargetID</td>
+								<td>TargetAgeRange, TargetGenrePreference</td>
+							</tr>
+							<tr>
+								<td><strong>CampaignID, AudienceTargetID</strong></td>
+								<td>AudienceBidModifier</td>
+							</tr>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/math.jpg" data-background-opacity="0.1">
+					<h3>Intermission:  Heath's Theorem</h3>
+					
+					<p>Let's introduce Heath's theorem here:</p>
+					
+					<blockquote>
+						Given a relvar R with components { X, Y, Z }, as well as functional dependency X --> Y, we can break R into two relvars, containing { X, Y } and { X, Z }, without loss.
+					</blockquote>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Solution, Step 3</h3>
+					
+					<p>If the answer to Step 2 was no, take a non-candidate key determinant and break it out into its own relvar, following Heath's theorem.</p>
+					
+					<div class="container">
+						<div class="col">
+							<img src="presentation/assets/image/agency.png" />
+						</div>
+						<div class="col">
+							<img src="presentation/assets/image/dmcampaign2.png" />
+						</div>					
+					</div>					
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Solution, Again</h3>
+					
+					<p>Repeat steps 2 and 3 as long as there are more functional dependencies which are not candidate keys.  Let's take CampaignID next.</p>
+					
+					<div class="container">
+						<div class="col">
+							<img src="presentation/assets/image/campaign.png" />
+						</div>
+						<div class="col">
+							<img src="presentation/assets/image/dmcampaign3.png" />
+						</div>					
+					</div>					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
+					<h3>The Solution, Again Again</h3>
+					
+					<p>Our remaining functional dependencies are:</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Determinant</th>
+								<th>Dependency</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>AudienceTargetID</td>
+								<td>TargetAgeRange, TargetGenrePreference</td>
+							</tr>
+							<tr>
+								<td><strong>CampaignID, AudienceTargetID</strong></td>
+								<td>AudienceBidModifier</td>
+							</tr>
+					</table>
+					
+					<p>This is not good enough!  <code>AudienceTargetID</code> is a <strong>subkey</strong> of the candidate key, not a <strong>superkey</strong>!  Therefore, break it out.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The End Result</h3>
+					
+					<p>Here is our final data model, in BCNF.  Also, I took the opportunity to rename the <strong>DM Campaign</strong> relvar to <strong>CampaignTarget</strong>, which better represents its meaning.</p>
+					
+					<img src="presentation/assets/image/finaldatamodel1.png" />
+				</section>
+				
+				<section data-background-image="presentation/assets/background/surfer-crash.jpg" data-background-opacity="0.2">
+					<h3>Where BCNF Breaks Down</h3>
+					
+					<p>Boyce-Codd Normal Form is great for most scenarios, but it does fall apart in one particular case:  when there are cycles in functional dependencies.</p>
+					
+					<p>Suppose we have a relvar with heading <code>{ S, J, T }</code>.  These attributes represent Students, Subjects, and Teachers, respectively.</p>
+					
+					<p>Given a functional dependency <code>T -> J</code>, we can break this out into <code>{ S, T }</code> and <code>{ T, J }</code></p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/border-collie.jpg" data-background-opacity="0.2">
+					<h3>Where BCNF Breaks Down</h3>
+					
+					<p>Relvar with heading <code>{ S, J, T }</code></p>
+					
+					<p>Functional dependency <code>T -> J</code></p>
+					
+					<p>Now if we include a functional dependency <code>S, J -> T</code>, it all falls apart.</p>
+					
+					<p><code>{ S, T } + { T, J }</code> doesn't work--T also depends on <code>{ S, J }</code>!</p>
+
+					<p>But <code>T</code> is not a superkey of <code>{ S, J, T }</code> so all keeping all three won't work either.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li>1NF</li>
+						<li>BCNF</li>
+						<li class="active">5NF</li>
+						<li>4NF</li>
+						<li>6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>Fifth Normal Form (5NF)</h3>
+					
+					<p>Fifth Normal Form is the second most-important normal form.  What BCNF is to functional dependencies, 5NF is to <strong>join dependencies</strong></p>
+					
+					<blockquote>
+						Relvar R is in 5NF if and only if every join dependency in R is implied in the keys of R.
+					</blockquote>
+					
+					<p class="fragment">Join Dependency:  if X1, X2, ..., Xn are the subsets of heading H on relvar R, a join dependency holds in R if and only if R can be non-loss decomposed into its projections on X1, X2, ..., Xn.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>A Quick Example</h3>
+					
+					<p>Suppose we have a relvar called <code>Suppliers</code> with FDs <code>{ SupplierID -> SupplierName, City } && { City -> Status }</code>.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>SupplierID</th>
+								<th>SupplierName</th>
+								<th>City</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>S1</td>
+								<td>Chicago</td>
+								<td>10</td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>S2</td>
+								<td>Lafayette</td>
+								<td>20</td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>S3</td>
+								<td>Chicago</td>
+								<td>10</td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td>S4</td>
+								<td>Lexington</td>
+								<td>10</td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td>S5</td>
+								<td>Lafyette</td>
+								<td>20</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>A Quick Example</h3>
+					
+					<p>A <strong>join dependency</strong> says we can break this relvar into at two components and reconstitute it without loss:  <code>S = { SupplierID, SupplierName, City }; C = { City, Status }</code></p>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>SupplierID</th>
+										<th>SupplierName</th>
+										<th>City</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1</td>
+										<td>S1</td>
+										<td>Chicago</td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td>S2</td>
+										<td>Lafayette</td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td>S3</td>
+										<td>Chicago</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td>S4</td>
+										<td>Lexington</td>
+									</tr>
+									<tr>
+										<td>5</td>
+										<td>S5</td>
+										<td>Lafyette</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>City</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Chicago</td>
+										<td>10</td>
+									</tr>
+									<tr>
+										<td>Lafayette</td>
+										<td>20</td>
+									</tr>
+									<tr>
+										<td>Lexington</td>
+										<td>10</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>					
+					</div>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/engineering.jpg" data-background-opacity="0.2">
+					<h3>In Other Words...</h3>
+					
+					<p>Functional dependencies are join dependencies.</p>
+					
+					<p>But not all join dependencies are functional dependencies!</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>BCNF and 5NF</h3>
+					
+					<blockquote>
+						A relvar R is in 5th Normal Form if it is in Boyce-Codd Normal Form and the relvar has no composite keys.
+					</blockquote>
+					
+					<p>A relvar may be in BCNF but not 5NF if there is a composite key and there are non-functional join dependencies which are not key-based.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/connections.jpg" data-background-opacity="0.2">
+					<h3>The Connection Trap</h3>
+					
+					<p>Suppose we have the following rules:</p>
+					
+					<ul>
+						<li class="fragment">IF an Agent (A) sells a Product (P)...</li>
+						<li class="fragment">AND (A) represents a Company (C)...</li>
+						<li class="fragment">AND (C) offers (P)...</li>
+						<li class="fragment">THEN (A) sells (P) for (C)</li>
+					</ul>
+					
+					<p class="fragment">This is also known as a <strong>symmetric constraint</strong>.  If this does not apply, then we fall into <strong>the connection trap</strong>.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/cobra.jpg" data-background-opacity="0.2">
+					<h3>No Connection Trap</h3>
+					
+					<p>In this setup, if all three attributes are necessary to determine which combinations are valid and which are not, then we are in 5NF.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Agent</th>
+								<th>Company</th>
+								<th>Product</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Smith</td>
+								<td>Ford</td>
+								<td>Car</td>
+							</tr>
+							<tr>
+								<td>Smith</td>
+								<td>GM</td>
+								<td>Truck</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/car1.jpg" data-background-opacity="0.2">
+					<h3>No Connection Trap</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Company</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Ford</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Ford</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>GM</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Ford</td>
+										<td>Car</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<p>Now, we see two agents (Smith and Jones) who sell various products for Ford and GM.  Ford manufactures cars and trucks, whereas GM only manufactures cars.</p>
+						</div>					
+					</div>
+					
+					<p>If we have a rule in which company salesmen sell <strong>all</strong> company products, then we can decompose this entity further.<br /> We then have a JD: <code>*{ {A, C}, {C, P}, {A, P} }</code></p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/car2.jpg" data-background-opacity="0.2">
+					<h3>No Connection Trap</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Company</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Ford</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>GM</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Ford</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Car</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Company</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Ford</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Ford</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>GM</td>
+										<td>Car</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<p>As long as our symmetric constraint holds, everything is fine.  But what happens if GM starts to sell trucks?</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/truck.jpg" data-background-opacity="0.2">
+					<h3>No Connection Trap</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Company</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Ford</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>GM</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Ford</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Car</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Company</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Ford</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Ford</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>GM</td>
+										<td>Car</td>
+									</tr>
+									<tr class="fragment highlight-red">
+										<td>GM</td>
+										<td>Truck</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<p class="fragment">Now this means that Smith must begin to sell GM trucks.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/car3.jpg" data-background-opacity="0.2">
+					<h3>The Connection Trap in Action</h3>
+					
+					<p>Now let's say that there is no such symmetric constraint.  We start with similar data, though note that Jones sells GM trucks instead of cars.</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Agent</th>
+								<th>Company</th>
+								<th>Product</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Smith</td>
+								<td>Ford</td>
+								<td>Car</td>
+							</tr>
+							<tr>
+								<td>Smith</td>
+								<td>Ford</td>
+								<td>Truck</td>
+							</tr>
+							<tr>
+								<td>Smith</td>
+								<td>GM</td>
+								<td>Car</td>
+							</tr>
+							<tr>
+								<td>Jones</td>
+								<td>GM</td>
+								<td>Truck</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/car4.jpg" data-background-opacity="0.2">
+					<h3>The Connection Trap in Action</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Company</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Ford</td>
+									</tr>
+									<tr class="fragment highlight-red">
+										<td>Smith</td>
+										<td>GM</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>GM</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Agent</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Car</td>
+									</tr>
+									<tr class="fragment highlight-red">
+										<td>Smith</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>Jones</td>
+										<td>Truck</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Company</th>
+										<th>Product</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Ford</td>
+										<td>Car</td>
+									</tr>
+									<tr>
+										<td>Ford</td>
+										<td>Truck</td>
+									</tr>
+									<tr>
+										<td>GM</td>
+										<td>Car</td>
+									</tr>
+									<tr class="fragment highlight-red">
+										<td>GM</td>
+										<td>Truck</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+					<p>We've broken this out.  But is it correct?</p>
+					<p class="fragment">Nope!  This says that Smith sells GM trucks, but that's not true!</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/ugh.jpg" data-background-opacity="0.2">
+					<h3>Why Bother?</h3>
+					
+					<p>If 5NF seems like overkill, here are a few reasons why it can be important.</p>
+					
+					<ul>
+						<li class="fragment">With no composite keys, BCNF is 5NF, so you're already good.</li>
+						<li class="fragment">Relvars not in 5NF can suffer from <strong>deletion anomalies</strong> and <strong>insertion anomalies</strong>.</li>
+						<li class="fragment">Symmetric constraints aren't extremely common, but there <strong>is</strong> a common variant which you'll want to think about.</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li>1NF</li>
+						<li>BCNF</li>
+						<li>5NF</li>
+						<li class="active">4NF</li>
+						<li>6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>Fourth Normal Form (4NF)</h3>
+					
+					<p>Fourth Normal Form is an anachronism--it's really just a subset of 5NF.</p>
+					
+					<blockquote>
+						Relvar R is in 4NF if and only if every Multi-Valued Dependency of R is implied in the keys of R.
+					</blockquote>
+					
+					<p class="fragment">Multi-Valued Dependency:  a join dependency with exactly two components.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/skeleton-thinking.jpg" data-background-opacity="0.2">
+					<h3>Multi-Valued Dependencies</h3>
+					
+					<p>Suppose the following:</p>
+					
+					<ul>
+						<li>Course <code>CNO</code> can be taught by teacher <code>TNO</code> using textbook </code>XNO</code></li>
+						<li>Each course c has a set T of teachers who can teach it and a set X of textbooks it uses</li>
+						<li>For each course c, there is a tuple for every combination of teacher t and textbook x</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Multi-Valued Dependencies</h3>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>CNO</th>
+								<th>TNO</th>
+								<th>XNO</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>C1</td>
+								<td>T1</td>
+								<td>X1</td>
+							</tr>
+							<tr>
+								<td>C1</td>
+								<td>T1</td>
+								<td>X2</td>
+							</tr>
+							<tr>
+								<td>C1</td>
+								<td>T2</td>
+								<td>X1</td>
+							</tr>
+							<tr>
+								<td>C1</td>
+								<td>T2</td>
+								<td>X2</td>
+							</tr>
+						</tbody>
+					</table>
+					
+					<p class="fragment"><code>*{ {CNO, TNO}, {CNO, XNO} }</code></p>
+					<p class="fragment"><code>CNO ->-> TNO && CNO ->-> XNO</code>, or <code>CNO ->-> TNO|XNO</code></p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/math.jpg" data-background-opacity="0.1">
+					<h3>Fagin's Theorem</h3>
+					
+					<blockquote>
+						Relvar R can be nonloss decomposed into its components <code>XY</code> and <code>XZ</code> if and only if <code>X->->Y|Z</code> holds in R.
+					</blockquote>
+					
+					<p class="fragment">In other words, if there are multiple, independent attributes, split them out into separate relvars.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/typewriter.jpg" data-background-opacity="0.2">
+					<h3>Solving for 4NF</h3>
+					
+					<p>Suppose Mr. Smith has two skills:  he can cook and he can type.</p>
+					
+					<p>Furthermore, he is fluent in German, French, and Greek.</p>
+					
+					<p>How do we represent this information?</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Bad Solution #1:  Disjoint Format</h3>
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Skill</th>
+										<th>Language</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Cook</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td></td>
+										<td>French</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td></td>
+										<td>German</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td></td>
+										<td>Greek</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<p>Problems:</p>
+							<ul>
+								<li class="fragment">What do blanks actually mean?</li>
+								<li class="fragment">What if Mr. Smith didn't know any languages?</li>
+							</ul>
+						</div>					
+					</div>	
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Bad Solution #2:  Minimal (with NULL)</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Skill</th>
+										<th>Language</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Cook</td>
+										<td>French</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td>German</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td></td>
+										<td>Greek</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<p>Problems:</p>
+							<ul>
+								<li class="fragment">Can Mr. Smith cook French cuisine and type in German?</li>
+								<li class="fragment">What can Mr. Smith do in Greek?</li>
+								<li class="fragment">What if Mr. Smith forgets German?</li>
+							</ul>
+						</div>					
+					</div>	
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Bad Solution #3:  Minimal (with repetition)</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Skill</th>
+										<th>Language</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Cook</td>
+										<td>French</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td>German</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td>Greek</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<p>Problems:</p>
+							<ul>
+								<li class="fragment">Can Mr. Smith cook French cuisine and type in German and Greek?</li>
+								<li class="fragment">What if Mr. Smith forgets German?</li>
+								<li class="fragment">What if Mr. Smith forgets how to type?</li>
+								<li class="fragment">What if Mr. Smith forgets French?</li>
+							</ul>
+						</div>					
+					</div>	
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Bad Solution #4:  Unrestricted</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Skill</th>
+										<th>Language</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Cook</td>
+										<td>French</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td></td>
+										<td>German</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+										<td>Greek</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<p>Problems:</p>
+							<ul>
+								<li class="fragment">How do we even understand this data?</li>
+								<li class="fragment">We have NULL values, repetition, and confusing combinations all at the same time</li>
+							</ul>
+						</div>					
+					</div>	
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Good Solution</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Skill</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>Cook</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Type</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th>Language</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Smith</td>
+										<td>French</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>German</td>
+									</tr>
+									<tr>
+										<td>Smith</td>
+										<td>Greek</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<ul>
+						<li class="fragment"><code>{ E, S, L }</code> was good enough for BCNF (<code>{ E, S, L }</code> was the candidate key) but not good enough for us.</li>
+						<li class="fragment">The join dependency <code>*{ {E, S}, {E, L} }</code> needed to be broken out.</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li>1NF</li>
+						<li>BCNF</li>
+						<li>5NF</li>
+						<li>4NF</li>
+						<li class="active">6NF</li>
+						<li>Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>Sixth Normal Form</h3>
+					
+					<blockquote>
+						Relvar R is in Sixth Normal Form (6NF) if and only if all join depdenencies which hold in R are trivial.
+					</blockquote>
+					
+					<p class="fragment">In other words, there may be one non-key attribute in addition to the key.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/jars.jpg" data-background-opacity="0.2">
+					<h3>An Example</h3>
+					
+					<p>Suppose we have a relvar <code>{ ProductKey, ProductName, ProductColor, ProductWeight, StorageCity }</code>.  Furthermore, our natural key is <code>ProductKey</code>.  This relvar is in 5NF (BCNF + non-composite key) and can be made 6NF in the following way:</p>
+					
+					<p><code>{ ProductKey, ProductName }</code></p>
+					<p><code>{ ProductKey, ProductColor }</code></p>
+					<p><code>{ ProductKey, ProductWeight }</code></p>
+					<p><code>{ ProductKey, StorageCity }</code></p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/book.jpg" data-background-opacity="0.2">
+					<h3>An Example</h3>
+					
+					<p>Note that each of these new relvars has a simple <strong>predicate</strong> (natural-language depiction of a relvar's utility) with no "AND":</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>Relvar</th>
+								<th>Predicate</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>{PK,ProductName}</code></td>
+								<td>Product <code>PK</code> has name <code>ProductName</code>.</td>
+							</tr>
+							<tr>
+								<td><code>{PK,ProductColor}</code></td>
+								<td>Product <code>PK</code> has color <code>ProductColor</code>.</td>
+							</tr>
+							<tr>
+								<td><code>{PK,ProductWeight}</code></td>
+								<td>Product <code>PK</code> has weight <code>ProductWeight</code>.</td>
+							</tr>
+							<tr>
+								<td><code>{PK,StorageCity}</code></td>
+								<td>Product <code>PK</code> is stored in city <code>StorageCity</code>.</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/monkey-thinking.jpg" data-background-opacity="0.2">
+					<h3>Do We Need 6NF?</h3>
+					
+					<p>Maybe!</p>
+					
+					<ul>
+						<li>If an attribute always has a value, it's better to cluster these attributes together.</li>
+						<li>If an attribute may be missing, it might be better to break it out into 6NF (to avoid NULL).</li>
+					</ul>
+					
+					<p>Suppose we might not always have product weight.  Then we'd have:</p>
+					
+					<p><code>{ ProductKey, ProductName, ProductColor, StorageCity }</code></p>
+					<p><code>{ ProductKey, ProductWeight }</code></p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/time.jpg" data-background-opacity="0.2">
+					<h3>Do We Need 6NF?</h3>
+					
+					<p>6NF works best with <strong>intervals</strong> of data.  Usually this is temporal data.  Example:</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>SupplierKey</th>
+								<th>City</th>
+								<th>Interval</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Supplier1</td>
+								<td>London</td>
+								<td>D4:D8</td>
+							</tr>
+							<tr>
+								<td>Supplier2</td>
+								<td>Paris</td>
+								<td>D3:D3</td>
+							</tr>
+							<tr>
+								<td>Supplier2</td>
+								<td>Athens</td>
+								<td>D5:D10</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/warehouse-water.jpg" data-background-opacity="0.2">
+					<h3>Do We Need 6NF?</h3>
+					
+					<p>Suppose we have an SCD2 style table:</p>
+					
+					<table>
+						<thead>
+							<tr>
+								<th>SupplierKey</th>
+								<th>City</th>
+								<td>Assistants</th>
+								<th>Interval</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Supplier1</td>
+								<td>London</td>
+								<td>4</td>
+								<td>D1:D8</td>
+							</tr>
+							<tr>
+								<td>Supplier1</td>
+								<td>London</td>
+								<td>5</td>
+								<td>D9:D14</td>
+							</tr>
+							<tr>
+								<td>Supplier1</td>
+								<td>Paris</td>
+								<td>5</td>
+								<td>D15:D17</td>
+							</tr>
+							<tr>
+								<td>Supplier2</td>
+								<td>Athens</td>
+								<td>3</td>
+								<td>D1:D17</td>
+							</tr>
+							<tr>
+								<td>Supplier2</td>
+								<td>Athens</td>
+								<td>4</td>
+								<td>D18:D18</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Do We Need 6NF?</h3>
+					
+					<p>Break it into 2 non-redundant relvars:</p>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>SupplierKey</th>
+										<th>City</th>
+										<th>Interval</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Supplier1</td>
+										<td>London</td>
+										<td>D1:D14</td>
+									</tr>
+									<tr>
+										<td>Supplier1</td>
+										<td>Paris</td>
+										<td>D15:D17</td>
+									</tr>
+									<tr>
+										<td>Supplier2</td>
+										<td>Athens</td>
+										<td>D1:D18</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>SupplierKey</th>
+										<td>Assistants</th>
+										<th>Interval</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Supplier1</td>
+										<td>4</td>
+										<td>D1:D8</td>
+									</tr>
+									<tr>
+										<td>Supplier1</td>
+										<td>5</td>
+										<td>D9:D17</td>
+									</tr>
+									<tr>
+										<td>Supplier2</td>
+										<td>3</td>
+										<td>D1:D17</td>
+									</tr>
+									<tr>
+										<td>Supplier2</td>
+										<td>4</td>
+										<td>D18:D18</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<p>To bring these back together, unpack on <code>Interval</code>, join together elements, and re-pack on <code>Interval</code>.  This is a gaps & islands problem!</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Agenda</h3>
+					
+					<ol>
+						<li>The Basics</li>
+						<li>1NF</li>
+						<li>BCNF</li>
+						<li>5NF</li>
+						<li>4NF</li>
+						<li>6NF</li>
+						<li class="active">Normalizaton and...</li>
+					</ol>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/warehouse.jpg" data-background-opacity="0.2">
+					<h3>Normalization and Data Warehousing</h3>
+					
+					<p>Relational theorists like Date tend not to like the Kimball model very much.  As a general-purpose relational model, the star schema is terrible.</p>
+					
+					<p>It is, however, a great model for data warehousing if you follow certain rules:</p>
+					
+					<ul>
+						<li>One and only one process to write data</li>
+						<li>The model is a proper model of business processes and understanding</li>
+						<li>Facts represent measurements of things</li>
+						<li>Dimensions represent further information about things</li>
+						<li>The appropriate slowly-changing dimension type is used for each dimension</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/process.jpg" data-background-opacity="0.2">
+					<h3>Normalization and Overnormalization</h3>
+					
+					<p>Overnormalization isn't really a thing.  What people tend to see as overnormalization tend to be one of the following:</p>
+					
+					<ul>
+						<li>Trying to remove legitimate business flexibility</li>
+						<li>Lossy decomposition and phantom rows</li>
+					</ul>
+					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/muay-thai.jpg" data-background-opacity="0.2">
+					<h3>Normalization and Denormalization</h3>
+					
+					<p>Normalization has very specific rules:  you can tell where you are and what you'd need to do to get to the next level.  With denormalization, how can we answer the following questions?</p>
+					
+					<ul>
+						<li>Denormalize to what extent?</li>
+						<li>Which method(s) should I use to denormalize these relvars?</li>
+						<li>Is my data model sufficiently denormalized?</li>
+						<li>Has my data model been denormalized correctly?</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/philosophy.jpg" data-background-opacity="0.2">
+					<h3>Normalization and Denormalization</h3>
+					
+					<p>General philosophy:</p>
+					
+					<ul>
+						<li>Denormalizing to increase redundancy can be okay <strong>when needed</strong>.  Ex:  data warehousing.</li>
+						<li>Denormalization can add invalid design ideas back in--avoid those at all costs.</li>
+					</ul>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/measurement-tools.jpg" data-background-opacity="0.2">
+					<h3>Normalization and Its Discontents</h3>
+					
+					<p>Normalization is not the end-all of relational design.</p>
+					
+					<ul>
+						<li>Join dependencies and functional dependencies are not the only kinds of constraints, and normalization will not help with these others</li>
+						<li>Multiple non-loss decompositions into 5NF may be possible, but there is no formal guidance on which to choose</li>
+						<li>Applying academic advice to practical circumstances is not always a direct mapping</li>
+						<li>Normalization is explicitly about the <strong>logical</strong> model, not the <strong>physical</strong> model</li>
+					</ul>
+				</section>				
+				
+				<section data-background-image="presentation/assets/background/wrappingup.jpg" data-background-opacity="0.2">
+					<h3>Wrapping Up</h3>
+					
+					<p>This has been a look at normalization from an academic perspective.  This can be a complicated topic and I've tried to straddle the line between formal correctness and ease of explanation.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/wrappingup.jpg" data-background-opacity="0.2">
+					<h3>Wrapping Up</h3>
+					
+					<p>
+						To learn more, go here:
+						<br />
+						<a href="https://csmore.info/on/dbdesign">https://CSmore.info/on/dbdesign</a>
+					</p>
+					<br />
+					<p>
+						And for help, contact me:
+						<br />
+						<a href="mailto:feasel@catallaxyservices.com">feasel@catallaxyservices.com</a> | <a href="https://www.twitter.com/feaselkl">@feaselkl</a>
+					</p>
+					<br />
+					<p>
+						Catallaxy Services consulting:
+						<br />
+						<a href="https://csmore.info/contact">https://CSmore.info/on/contact</a>
+					</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="../reveal.js/dist/reveal.js"></script>
+		<script src="../reveal.js/plugin/zoom/zoom.js"></script>
+		<script src="../reveal.js/plugin/notes/notes.js"></script>
+		<script src="../reveal.js/plugin/search/search.js"></script>
+		<script src="../reveal.js/plugin/markdown/markdown.js"></script>
+		<script src="../reveal.js/plugin/math/math.js"></script>
+		<script src="../reveal.js/plugin/menu/menu.js"></script>
+		<script src="../reveal.js/plugin/highlight/highlight.js"></script>
+		<script src="../reveal.js/plugin/chart/Chart.min.js"></script>
+		<script src="../reveal.js/plugin/chart/plugin.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				width: '70%',
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+				transition: 'fade',
+				
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath, RevealMenu, RevealChart ]
+			});
+		</script>
+	</body>
+</html>
