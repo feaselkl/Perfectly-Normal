@@ -97,6 +97,14 @@
 
 					<img src="presentation/assets/image/DatabaseDesignCover.jpg" height="450" />
 				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>The Scenario</h3>
+					
+					<p>Our scenario is a music studio, responsible for managing artists, cutting albums, marketing, and distribution.</p>
+
+					<p>This studio is working on a centralized database system but their application developers don't have much experience and would like our advice on how to do things the right way.</p>
+				</section>
 				
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Agenda</h3>
@@ -154,13 +162,7 @@
 				<section data-background-image="presentation/assets/background/tags.jpg" data-background-opacity="0.2">
 					<h3>Normal Forms Ranked by Importance</h3>
 					
-					<ul>
-						<li class="fragment">Most important:  BCNF, 5NF</li>
-						<li class="fragment">Sometimes important:  6NF</li>
-						<li class="fragment">Overrated:  1NF, 4NF</li>
-						<li class="fragment">Rarely relevant:  EKNF, ETNF, RFNF, SKNF, Overstrong PJ/NF</li>
-						<li class="fragment">Never relevant:  2NF, 3NF</li>
-					</ul>
+					<img src="presentation/assets/image/NormalFormsTierList.png">
 				</section>
 				
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
@@ -193,31 +195,31 @@
 					<table>
 						<thead>
 							<tr>
-								<th>UserName (CHAR)</th>
-								<th>Password (BINARY)</th>
-								<th>IsActive (BIT)</th>
+								<th>Artist (CHAR)</th>
+								<th>Album (CHAR)</th>
+								<th>ReleaseYear (INT)</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Bob</td>
-								<td>0xABC123</td>
-								<td>1</td>
+								<td>Tsunami Bomb</td>
+								<td>The Ultimate Escape</td>
+								<td>2002</td>
 							</tr>
 							<tr>
-								<td>Jane</td>
-								<td>0xCDA331</td>
-								<td>1</td>
+								<td>Tsunami Bomb</td>
+								<td>The Definitive Act</td>
+								<td>2004</td>
 							</tr>
 							<tr>
-								<td>Marcus</td>
-								<td>0xFFF048</td>
-								<td>0</td>
+								<td>Tsunami Bomb</td>
+								<td>Trust No One</td>
+								<td>2016</td>
 							</tr>
 						</tbody>
 					</table>
 					
-					<p>Adding a new tuple <code>t(Jim, 0xBBA492, 1)</code> requires that the new tuple's heading, with attributes and types, matches the existing relvar's heading.</p>
+					<p>Adding a new tuple <code>t(Tsunami Bomb, The Spine that Binds, 2019)</code> requires that the new tuple's heading, with attributes and types, matches the existing relvar's heading.</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/rulers.jpg" data-background-opacity="0.2">
@@ -233,6 +235,19 @@
 						<li class="fragment">Tuple order does not matter for relations</li>
 						<li class="fragment">All attributes are <strong>regular</strong>:  they have a name, a type, are not hidden, etc.</li>
 					</ul>
+				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Quick Quiz -- Is This in 1NF?</h3>
+
+					<img src="presentation/assets/image/AlbumMega.png" />
+				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Quick Quiz -- Is This in 1NF?</h3>
+
+					<p>Answer:  YES!</p>
+					<p>Repeated sets are NOT a violation of 1NF!</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
@@ -267,30 +282,46 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Specialist</th>
-								<th>Project</th>
-								<th>Task</th>
-								<th>Login</th>
+								<th>RecordingDate</th>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>Genre</th>
+								<th>Studio</th>
+								<th>StudioManager</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Julia</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td>JuliaH</td>
+								<td>2023-07-10</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td>Marie</td>
 							</tr>
 							<tr>
-								<td>Lindsay</td>
-								<td>Analysis</td>
-								<td>Build spark cluster</td>
-								<td>LindsayM</td>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
+								<td>Marie</td>
 							</tr>
 							<tr>
-								<td>Lindsay</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td>LindsayM</td>
+								<td>2023-07-10</td>
+								<td>Land of Talk</td>
+								<td>A2</td>
+								<td>Indie</td>
+								<td>Studio B</td>
+								<td>Jacques</td>
+							</tr>
+							<tr>
+								<td>2023-07-11</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td>Marie</td>
 							</tr>
 						</tbody>
 					</table>
@@ -299,35 +330,51 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Update Anomalies</h3>
 					
-					<p>Lindsay gets married and changes her last name.  But we miss it in one project.</p>
+					<p>Lindsay takes over Studio A.  But we miss it in one entry.</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>Specialist</th>
-								<th>Project</th>
-								<th>Task</th>
-								<th>Login</th>
+								<th>RecordingDate</th>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>Genre</th>
+								<th>Studio</th>
+								<th>StudioManager</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Julia</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td>JuliaH</td>
+								<td>2023-07-10</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td>Lindsay</td>
 							</tr>
 							<tr>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
 								<td>Lindsay</td>
-								<td>Analysis</td>
-								<td>Build spark cluster</td>
-								<td><strong>LindsayJ</strong></td>
 							</tr>
 							<tr>
-								<td>Lindsay</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td><p class="fragment highlight-red">LindsayM</p></td>
+								<td>2023-07-10</td>
+								<td>Land of Talk</td>
+								<td>A2</td>
+								<td>Indie</td>
+								<td>Studio B</td>
+								<td>Jacques</td>
+							</tr>
+							<tr>
+								<td>2023-07-11</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td><p class="fragment highlight-red">Marie</p></td>
 							</tr>
 						</tbody>
 					</table>
@@ -336,35 +383,51 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Redundant Data</h3>
 					
-					<p>Ann comes off the bench to do all the ETL work.  Let's update the database.</p>
-					
+					<p>Kidneythieves had to cancel so we booked Metric for the entire day.  Let's update the database.</p>
+
 					<table>
 						<thead>
 							<tr>
-								<th>Specialist</th>
-								<th>Project</th>
-								<th>Task</th>
-								<th>Login</th>
+								<th>RecordingDate</th>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>Genre</th>
+								<th>Studio</th>
+								<th>StudioManager</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><strong>Ann</strong></td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td><strong>AnnB</strong></td>
-							</tr>
-							<tr>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
 								<td>Lindsay</td>
-								<td>Analysis</td>
-								<td>Build spark cluster</td>
-								<td>LindsayJ</td>
 							</tr>
 							<tr class="fragment highlight-red">
-								<td><strong>Ann</strong></td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td><strong>AnnB</strong></td>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
+								<td>Lindsay</td>
+							</tr>
+							<tr>
+								<td>2023-07-10</td>
+								<td>Land of Talk</td>
+								<td>A2</td>
+								<td>Indie</td>
+								<td>Studio B</td>
+								<td>Jacques</td>
+							</tr>
+							<tr>
+								<td>2023-07-11</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td>Lindsay</td>
 							</tr>
 						</tbody>
 					</table>
@@ -373,41 +436,59 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Missing Data</h3>
 					
-					<p>Where was Ann?  How do we make her visible when she's on the bench?</p>
+					<p>Nobody's booked in Studio C. How do we indicate that it exists?</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>Specialist</th>
-								<th>Project</th>
-								<th>Task</th>
-								<th>Login</th>
+								<th>RecordingDate</th>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>Genre</th>
+								<th>Studio</th>
+								<th>StudioManager</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Julia</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td>JuliaH</td>
-							</tr>
-							<tr>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
 								<td>Lindsay</td>
-								<td>Analysis</td>
-								<td>Build spark cluster</td>
-								<td>LindsayJ</td>
-							</tr>
-							<tr>
-								<td>Lindsay</td>
-								<td>ETL</td>
-								<td>Write scripts</td>
-								<td>LindsayJ</td>
 							</tr>
 							<tr class="fragment highlight-red">
-								<td>Ann</td>
+								<td>2023-07-10</td>
+								<td>Metric</td>
+								<td>A3</td>
+								<td>Indie</td>
+								<td>Studio A</td>
+								<td>Lindsay</td>
+							</tr>
+							<tr>
+								<td>2023-07-10</td>
+								<td>Land of Talk</td>
+								<td>A2</td>
+								<td>Indie</td>
+								<td>Studio B</td>
+								<td>Jacques</td>
+							</tr>
+							<tr>
+								<td>2023-07-11</td>
+								<td>Kidneythieves</td>
+								<td>A1</td>
+								<td>Industrial</td>
+								<td>Studio A</td>
+								<td>Lindsay</td>
+							</tr>
+							<tr class="fragment highlight-red">
+								<td>2023-07-10</td>
+								<td>NOBODY</td>
 								<td>NONE</td>
-								<td>Placeholder</td>
-								<td>AnnB</td>
+								<td>N/A</td>
+								<td>Studio C</td>
+								<td>Charles</td>
 							</tr>
 						</tbody>
 					</table>
@@ -421,44 +502,48 @@
 					<blockquote>
 						All functional dependencies have superkey determinants.
 					</blockquote>
+				</section>
+
+				<section data-background-image="presentation/assets/background/binders.jpg" data-background-opacity="0.2">
+					<h3>Superkey</h3>
 					
-					<p class="fragment">Superkey:  a unique combination of attributes, but not necessarily the most parsimonious unique combination of attributes.  If <code>(A1, A2)</code> is a key, <code>(A1)</code> is a <strong>subkey</strong> and <code>(A1, A2, A3)</code> is a <strong>superkey</strong>.</p>
+					<p>Superkey:  a unique combination of attributes, but not necessarily the most parsimonious unique combination of attributes.  If <code>(RecordingDate, Artist)</code> is a key, <code>(RecordingDate)</code> is a <strong>subkey</strong> and <code>(RecordingDate, Artist, Studio)</code> is a <strong>superkey</strong>.</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/arrow.jpg" data-background-opacity="0.2">
 					<h3>Functional Dependencies</h3>
 					
-					<p>Suppose we have some attribute Z.</p>
-					<p>The value of Z depends on inputs X and Y:</p>
+					<p>Suppose we have some attribute SoundEngineer.</p>
+					<p>The value of SoundEngineer depends on inputs Producer and Manager:</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>X</th>
-								<th>Y</th>
-								<th>Z</th>
+								<th>Studio</th>
+								<th>Producer</th>
+								<th>SoundEngineer</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>1</td>
-								<td>4</td>
-								<td>7</td>
+								<td>A</td>
+								<td>Janice</td>
+								<td>Sam</td>
 							</tr>
 							<tr>
-								<td>3</td>
-								<td>5</td>
-								<td>2</td>
+								<td>B</td>
+								<td>Randi</td>
+								<td>Edgar</td>
 							</tr>
 							<tr>
-								<td>1</td>
-								<td>4</td>
-								<td>7</td>
+								<td>A</td>
+								<td>Janice</td>
+								<td>Sam</td>
 							</tr>
 							<tr>
-								<td>6</td>
-								<td>8</td>
-								<td>7</td>
+								<td>C</td>
+								<td>Tamika</td>
+								<td>Sam</td>
 							</tr>
 						</tbody>
 					</table>
@@ -467,13 +552,36 @@
 				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
 					<h3>Functional Dependencies</h3>
 					
-					<p>When we see <code>X=1</code> and <code>Y=4</code>, we know <code>Z=7</code>.</p>
+					<p>When we see <code>Studio=A</code> and <code>Producer=Janice</code>, we know <code>SoundEngineer=Sam</code>.</p>
 					
-					<p>In other words, X and Y <strong>determine</strong> Z, or <code>(X, Y)</code> is the <strong>determinant</strong> for Z.</p>
+					<p>In other words, Studio and Producer <strong>determine</strong> SoundEngineer, or <code>(Studio, Producer)</code> is the <strong>determinant</strong> for SoundEngineer.</p>
 					
-					<p>In mathematical terms, we can write this as <code>(X, Y) -> Z</code>.</p>
+					<p>In mathematical terms, we can write this as <code>(Studio, Producer) -> SoundEngineer</code>.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
+					<h3>Functional Dependencies</h3>
+					
+					<p>Note that functional dependencies only go one way.</p>
+					
+					<p><code>(Studio, Producer) -> SoundEngineer</code>.</p>
+					
+					<p><code>Studio=A && Producer=Janice -> SoundEngineer=Sam</code>.</p>
+					
+					<p>But Sam can be the sound engineer for other combinations of Studio + Producer.  The only thing we guarantee is that <code>(A, Janice) -> Sam</code> (for all combinations of Studio*Producer and their relevant SoundEngineers).</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/arrow-right.jpg" data-background-opacity="0.2">
+					<h3>Figuring out Functional Dependencies</h3>
 					
 					<p>NOTE:  figuring out functional dependencies in practice may be difficult!</p>
+					
+					<p>There are two primary techniques for figuring them out in practice.</p>
+					
+					<ul>
+					  <li>Ask an expert -- discuss business rules and find out what they know.</li>
+					  <li>Review existing data and see where we can find columns whose values <strong>always</strong> match up in this way. Functional dependencies must always hold; it can't just be a "sometimes" thing.</li>
+					</ul>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/books-45degree.jpg" data-background-opacity="0.2">
@@ -660,47 +768,47 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>A Quick Example</h3>
 					
-					<p>Suppose we have a relvar called <code>Suppliers</code> with FDs <code>{ SupplierID -> SupplierName, City } && { City -> Status }</code>.</p>
+					<p>Suppose we have a relvar called <code>Warehouse</code> with FDs <code>{ WarehouseID -> GeneralManager, City } && { City -> PropertyTaxRate }</code>.</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>SupplierID</th>
-								<th>SupplierName</th>
+								<th>WarehouseID</th>
+								<th>GeneralManager</th>
 								<th>City</th>
-								<th>Status</th>
+								<th>PropertyTaxRate</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
 								<td>1</td>
-								<td>S1</td>
+								<td>Steve</td>
 								<td>Chicago</td>
-								<td>10</td>
+								<td>4.8%</td>
 							</tr>
 							<tr>
 								<td>2</td>
-								<td>S2</td>
+								<td>Lewis</td>
 								<td>Lafayette</td>
-								<td>20</td>
+								<td>2.1%</td>
 							</tr>
 							<tr>
 								<td>3</td>
-								<td>S3</td>
+								<td>Suzanne</td>
 								<td>Chicago</td>
-								<td>10</td>
+								<td>4.8%</td>
 							</tr>
 							<tr>
 								<td>4</td>
-								<td>S4</td>
+								<td>Alexa</td>
 								<td>Lexington</td>
-								<td>10</td>
+								<td>3.3%</td>
 							</tr>
 							<tr>
 								<td>5</td>
-								<td>S5</td>
+								<td>Lee</td>
 								<td>Lafyette</td>
-								<td>20</td>
+								<td>2.1%</td>
 							</tr>
 						</tbody>
 					</table>
@@ -709,42 +817,42 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>A Quick Example</h3>
 					
-					<p>A <strong>join dependency</strong> says we can break this relvar into at two components and reconstitute it without loss:  <code>S = { SupplierID, SupplierName, City }; C = { City, Status }</code></p>
+					<p>A <strong>join dependency</strong> says we can break this relvar into at two components and reconstitute it without loss:  <code>W = { WarehouseID, GeneralManager, City }; C = { City, PropertyTaxRate }</code></p>
 					
 					<div class="container">
 						<div class="col">
 							<table>
 								<thead>
 									<tr>
-										<th>SupplierID</th>
-										<th>SupplierName</th>
+										<th>WarehouseID</th>
+										<th>GeneralManager</th>
 										<th>City</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
 										<td>1</td>
-										<td>S1</td>
+										<td>Steve</td>
 										<td>Chicago</td>
 									</tr>
 									<tr>
 										<td>2</td>
-										<td>S2</td>
+										<td>Lewis</td>
 										<td>Lafayette</td>
 									</tr>
 									<tr>
 										<td>3</td>
-										<td>S3</td>
+										<td>Suzanne</td>
 										<td>Chicago</td>
 									</tr>
 									<tr>
 										<td>4</td>
-										<td>S4</td>
+										<td>Alexa</td>
 										<td>Lexington</td>
 									</tr>
 									<tr>
 										<td>5</td>
-										<td>S5</td>
+										<td>Lee</td>
 										<td>Lafyette</td>
 									</tr>
 								</tbody>
@@ -761,15 +869,15 @@
 								<tbody>
 									<tr>
 										<td>Chicago</td>
-										<td>10</td>
+										<td>4.8%</td>
 									</tr>
 									<tr>
 										<td>Lafayette</td>
-										<td>20</td>
+										<td>2.1%</td>
 									</tr>
 									<tr>
 										<td>Lexington</td>
-										<td>10</td>
+										<td>3.3%</td>
 									</tr>
 								</tbody>
 							</table>
@@ -795,16 +903,130 @@
 					<p>A relvar may be in BCNF but not 5NF if there is a composite key and there are non-functional join dependencies which are not key-based.</p>
 				</section>
 				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Another Example</h3>
+
+					<table>
+						<thead>
+							<tr>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>SalesCountry</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Horrorpops</td>
+								<td>Bring It On!</td>
+								<td>United States</td>
+							</tr>
+							<tr>
+								<td>Horrorpops</td>
+								<td>Bring It On!</td>
+								<td>Denmark</td>
+							</tr>
+							<tr>
+								<td>Band 1</td>
+								<td>Unnamed Future Album</td>
+								<td>Canada</td>
+							</tr>
+							<tr>
+								<td>Band 2</td>
+								<td>Unnamed Future Album</td>
+								<td>Canada</td>
+							</tr>
+							<tr>
+								<td>Band 1</td>
+								<td>Unnamed Future Album</td>
+								<td>United States</td>
+							</tr>
+							<tr>
+								<td>Band 2</td>
+								<td>Unnamed Future Album</td>
+								<td>United States</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Another Example</h3>
+					
+					<p>This relvar <code>AlbumSales</code> has a key of <code>{ Artist, Album, SalesCountry }</code>.  This means it is in BCNF, but if it feels weird to you, it should!</p>
+					
+					<p>There are two <strong>join dependencies</strong> here!  <code>{ Artist, Album }</code> and <code>{ Album, SalesCountry }</code> can be cleanly split out from the ternary relationship into two separate relvars.</p>
+					
+			  </section>
+					
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>Another Example</h3>
+					
+					<div class="container">
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Artist</th>
+										<th>Album</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Horrorpops</td>
+										<td>Bring It On!</td>
+									</tr>
+									<tr>
+										<td>Band 1</td>
+										<td>Unnamed Future Album</td>
+									</tr>
+									<tr>
+										<td>Band 2</td>
+										<td>Unnamed Future Album</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col">
+							<table>
+								<thead>
+									<tr>
+										<th>Album</th>
+										<th>SalesCountry</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Bring It On!</td>
+										<td>United States</td>
+									</tr>
+									<tr>
+										<td>Bring It On!</td>
+										<td>Denmark</td>
+									</tr>
+									<tr>
+										<td>Unnamed Future Album</td>
+										<td>Canada</td>
+									</tr>
+									<tr>
+										<td>Unnamed Future Album</td>
+										<td>United States</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>					
+					</div>
+				</section>
+				
 				<section data-background-image="presentation/assets/background/connections.jpg" data-background-opacity="0.2">
 					<h3>The Connection Trap</h3>
 					
 					<p>Suppose we have the following rules:</p>
 					
 					<ul>
-						<li class="fragment">IF an Agent (A) sells a Product (P)...</li>
-						<li class="fragment">AND (A) represents a Company (C)...</li>
-						<li class="fragment">AND (C) offers (P)...</li>
-						<li class="fragment">THEN (A) sells (P) for (C)</li>
+						<li class="fragment">IF a Store (S) stocks a Genre (G)...</li>
+						<li class="fragment">AND (S) stocks the work of an Artist (A)...</li>
+						<li class="fragment">AND (A) performs in (G)...</li>
+						<li class="fragment">THEN (S) sells works in (G) from (A)</li>
 					</ul>
 					
 					<p class="fragment">This is also known as a <strong>symmetric constraint</strong>.  If this does not apply, then we fall into <strong>the connection trap</strong>.</p>
@@ -818,21 +1040,26 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Agent</th>
-								<th>Company</th>
-								<th>Product</th>
+								<th>Store</th>
+								<th>Genre</th>
+								<th>Artist</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Smith</td>
-								<td>Ford</td>
-								<td>Car</td>
+								<td>Music Everywhere</td>
+								<td>Punk Rock</td>
+								<td>Bad Religion</td>
 							</tr>
 							<tr>
-								<td>Smith</td>
-								<td>GM</td>
-								<td>Truck</td>
+								<td>Music Everywhere</td>
+								<td>Prog Rock</td>
+								<td>Rush</td>
+							</tr>
+							<tr>
+								<td>The Music Factory</td>
+								<td>Indie</td>
+								<td>Metric</td>
 							</tr>
 						</tbody>
 					</table>
@@ -846,41 +1073,36 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Company</th>
-										<th>Product</th>
+										<th>Store</th>
+										<th>Genre</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Ford</td>
-										<td>Car</td>
+										<td>Music Everywhere</td>
+										<td>Punk Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>Ford</td>
-										<td>Truck</td>
+										<td>Music Everywhere</td>
+										<td>Prog Rock</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>GM</td>
-										<td>Car</td>
-									</tr>
-									<tr>
-										<td>Jones</td>
-										<td>Ford</td>
-										<td>Car</td>
+										<td>The Music Factory</td>
+										<td>Indie</td>
+										<td>Metric</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 						<div class="col">
-							<p>Now, we see two agents (Smith and Jones) who sell various products for Ford and GM.  Ford manufactures cars and trucks, whereas GM only manufactures cars.</p>
+							<p>Now, we see two stores (Music Everywhere & The Music Factory) who sell albums by various artists in different genres.  Bad Religion makes Punk Rock albums, Rush makes Prog Rock albums, and Metric makes Indie albums.</p>
 						</div>					
 					</div>
 					
-					<p>If we have a rule in which company salesmen sell <strong>all</strong> company products, then we can decompose this entity further.<br /> We then have a JD: <code>*{ {A, C}, {C, P}, {A, P} }</code></p>
+					<p>If we have a rule in which stores sell <strong>all</strong> artists in a genre, then we can decompose this entity further.<br /> We then have a JD: <code>*{ {S, G}, {G, A}, {S, A} }</code></p>	
 				</section>
 				
 				<section data-background-image="presentation/assets/background/car2.jpg" data-background-opacity="0.2">
@@ -891,22 +1113,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Company</th>
+										<th>Store</th>
+										<th>Genre</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Ford</td>
+										<td>Music Everywhere</td>
+										<td>Punk Rock</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>GM</td>
+										<td>Music Everywhere</td>
+										<td>Prog Rock</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>Ford</td>
+										<td>The Music Factory</td>
+										<td>Indie</td>
 									</tr>
 								</tbody>
 							</table>
@@ -915,22 +1137,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Product</th>
+										<th>Genre</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Car</td>
+										<td>Punk Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>Truck</td>
+										<td>Prog Rock</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>Car</td>
+										<td>Indie</td>
+										<td>Metric</td>
 									</tr>
 								</tbody>
 							</table>
@@ -939,29 +1161,29 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Company</th>
-										<th>Product</th>
+										<th>Store</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Ford</td>
-										<td>Car</td>
+										<td>Music Everywhere</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr>
-										<td>Ford</td>
-										<td>Truck</td>
+										<td>Music Everywhere</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>GM</td>
-										<td>Car</td>
+										<td>The Music Factory</td>
+										<td>Metric</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 					
-					<p>As long as our symmetric constraint holds, everything is fine.  But what happens if GM starts to sell trucks?</p>
+					<p>As long as our symmetric constraint holds, everything is fine.  But what happens if Bad Religion sells a Prog Rock album?</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/truck.jpg" data-background-opacity="0.2">
@@ -972,22 +1194,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Company</th>
+										<th>Store</th>
+										<th>Genre</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Ford</td>
+										<td>Music Everywhere</td>
+										<td>Punk Rock</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>GM</td>
+										<td>Music Everywhere</td>
+										<td>Prog Rock</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>Ford</td>
+										<td>The Music Factory</td>
+										<td>Indie</td>
 									</tr>
 								</tbody>
 							</table>
@@ -996,22 +1218,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Product</th>
+										<th>Store</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Car</td>
+										<td>Music Everywhere</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr>
-										<td>Smith</td>
-										<td>Truck</td>
+										<td>Music Everywhere</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>Car</td>
+										<td>The Music Factory</td>
+										<td>Indie</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1020,68 +1242,63 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Company</th>
-										<th>Product</th>
+										<th>Genre</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Ford</td>
-										<td>Car</td>
+										<td>Indie</td>
+										<td>Metric</td>
 									</tr>
 									<tr>
-										<td>Ford</td>
-										<td>Truck</td>
+										<td>Prog Rock</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>GM</td>
-										<td>Car</td>
+										<td>Punk Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr class="fragment highlight-red">
-										<td>GM</td>
-										<td>Truck</td>
+										<td>Prog Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 					
-					<p class="fragment">Now this means that Smith must begin to sell GM trucks.</p>
+					<p class="fragment">Now this means that Music Everywhere must sell Bad Religion's Prog Rock album.</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/car3.jpg" data-background-opacity="0.2">
 					<h3>The Connection Trap in Action</h3>
 					
-					<p>Now let's say that there is no such symmetric constraint.  We start with similar data, though note that Jones sells GM trucks instead of cars.</p>
+					<p>Now let's say that there is no such symmetric constraint.  The <strong>only</strong> results we should see are the following:</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>Agent</th>
-								<th>Company</th>
-								<th>Product</th>
+								<th>Store</th>
+								<th>Genre</th>
+								<th>Artist</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Smith</td>
-								<td>Ford</td>
-								<td>Car</td>
+								<td>Music Everywhere</td>
+								<td>Punk Rock</td>
+								<td>Bad Religion</td>
 							</tr>
 							<tr>
-								<td>Smith</td>
-								<td>Ford</td>
-								<td>Truck</td>
+								<td>Music Everywhere</td>
+								<td>Prog Rock</td>
+								<td>Rush</td>
 							</tr>
 							<tr>
-								<td>Smith</td>
-								<td>GM</td>
-								<td>Car</td>
-							</tr>
-							<tr>
-								<td>Jones</td>
-								<td>GM</td>
-								<td>Truck</td>
+								<td>The Music Factory</td>
+								<td>Indie</td>
+								<td>Metric</td>
 							</tr>
 						</tbody>
 					</table>
@@ -1095,22 +1312,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Company</th>
+										<th>Store</th>
+										<th>Genre</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Smith</td>
-										<td>Ford</td>
+										<td>Music Everywhere</td>
+										<td>Punk Rock</td>
 									</tr>
 									<tr class="fragment highlight-red">
-										<td>Smith</td>
-										<td>GM</td>
+										<td>Music Everywhere</td>
+										<td>Prog Rock</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>GM</td>
+										<td>The Music Factory</td>
+										<td>Indie</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1119,22 +1336,22 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Agent</th>
-										<th>Product</th>
+										<th>Store</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Car</td>
-									</tr>
 									<tr class="fragment highlight-red">
-										<td>Smith</td>
-										<td>Truck</td>
+										<td>Music Everywhere</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr>
-										<td>Jones</td>
-										<td>Truck</td>
+										<td>Music Everywhere</td>
+										<td>Rush</td>
+									</tr>
+									<tr>
+										<td>The Music Factory</td>
+										<td>Indie</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1143,26 +1360,26 @@
 							<table>
 								<thead>
 									<tr>
-										<th>Company</th>
-										<th>Product</th>
+										<th>Genre</th>
+										<th>Artist</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Ford</td>
-										<td>Car</td>
+										<td>Indie</td>
+										<td>Metric</td>
 									</tr>
 									<tr>
-										<td>Ford</td>
-										<td>Truck</td>
+										<td>Prog Rock</td>
+										<td>Rush</td>
 									</tr>
 									<tr>
-										<td>GM</td>
-										<td>Car</td>
+										<td>Punk Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 									<tr class="fragment highlight-red">
-										<td>GM</td>
-										<td>Truck</td>
+										<td>Prog Rock</td>
+										<td>Bad Religion</td>
 									</tr>
 								</tbody>
 							</table>
@@ -1170,7 +1387,7 @@
 					</div>
 					
 					<p>We've broken this out.  But is it correct?</p>
-					<p class="fragment">Nope!  This says that Smith sells GM trucks, but that's not true!</p>
+					<p class="fragment">Nope!  This says that Music Everywhere will sell Bad Religion's Prog Rock album, but that's not true!</p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/ugh.jpg" data-background-opacity="0.2">
@@ -1214,12 +1431,12 @@
 				<section data-background-image="presentation/assets/background/skeleton-thinking.jpg" data-background-opacity="0.2">
 					<h3>Multi-Valued Dependencies</h3>
 					
-					<p>Suppose the following:</p>
+					<p>We've already seen an example of this:  relvar <code>AlbumSales</code> has a key of <code>{ Artist, Album, SalesCountry }</code>.</p>
 					
 					<ul>
-						<li>Course <code>CNO</code> can be taught by teacher <code>TNO</code> using textbook </code>XNO</code></li>
-						<li>Each course c has a set T of teachers who can teach it and a set X of textbooks it uses</li>
-						<li>For each course c, there is a tuple for every combination of teacher t and textbook x</li>
+						<li>Artist <code>R</code> is on Album <code>A</code>, sold in SalesCountry <code>S</code></li>
+						<li>Each album has a set of artists, and each album is sold in a set of countries</li>
+						<li>For each album, there is a tuple for every combination of artist sales country</li>
 					</ul>
 				</section>
 				
@@ -1229,37 +1446,47 @@
 					<table>
 						<thead>
 							<tr>
-								<th>CNO</th>
-								<th>TNO</th>
-								<th>XNO</th>
+								<th>Artist</th>
+								<th>Album</th>
+								<th>SalesCountry</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>C1</td>
-								<td>T1</td>
-								<td>X1</td>
+								<td>Horrorpops</td>
+								<td>Bring It On!</td>
+								<td>United States</td>
 							</tr>
 							<tr>
-								<td>C1</td>
-								<td>T1</td>
-								<td>X2</td>
+								<td>Horrorpops</td>
+								<td>Bring It On!</td>
+								<td>Denmark</td>
 							</tr>
 							<tr>
-								<td>C1</td>
-								<td>T2</td>
-								<td>X1</td>
+								<td>Band 1</td>
+								<td>Unnamed Future Album</td>
+								<td>Canada</td>
 							</tr>
 							<tr>
-								<td>C1</td>
-								<td>T2</td>
-								<td>X2</td>
+								<td>Band 2</td>
+								<td>Unnamed Future Album</td>
+								<td>Canada</td>
+							</tr>
+							<tr>
+								<td>Band 1</td>
+								<td>Unnamed Future Album</td>
+								<td>United States</td>
+							</tr>
+							<tr>
+								<td>Band 2</td>
+								<td>Unnamed Future Album</td>
+								<td>United States</td>
 							</tr>
 						</tbody>
 					</table>
 					
-					<p class="fragment"><code>*{ {CNO, TNO}, {CNO, XNO} }</code></p>
-					<p class="fragment"><code>CNO ->-> TNO && CNO ->-> XNO</code>, or <code>CNO ->-> TNO|XNO</code></p>
+					<p class="fragment"><code>*{ {Album, Artist}, {Album, SalesCountry} }</code></p>
+					<p class="fragment"><code>Album ->-> Artist && Album ->-> SalesCountry</code>, or <code>Album ->-> Artist|SalesCountry</code></p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/math.jpg" data-background-opacity="0.1">
@@ -1272,253 +1499,13 @@
 					<p class="fragment">In other words, if there are multiple, independent attributes, split them out into separate relvars.</p>
 				</section>
 				
-				<section data-background-image="presentation/assets/background/typewriter.jpg" data-background-opacity="0.2">
-					<h3>Solving for 4NF</h3>
-					
-					<p>Suppose Mr. Smith has two skills:  he can cook and he can type.</p>
-					
-					<p>Furthermore, he is fluent in German, French, and Greek.</p>
-					
-					<p>How do we represent this information?</p>
-				</section>
-				
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>Bad Solution #1:  Disjoint Format</h3>
-					<div class="container">
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Skill</th>
-										<th>Language</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Cook</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td></td>
-										<td>French</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td></td>
-										<td>German</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td></td>
-										<td>Greek</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col">
-							<p>Problems:</p>
-							<ul>
-								<li>What do blanks actually mean?</li>
-								<li>What if Mr. Smith didn't know any languages?</li>
-							</ul>
-						</div>					
-					</div>	
-				</section>
-				
-				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>Bad Solution #2:  Minimal (with NULL)</h3>
+					<h3>What this Prevents</h3>
 					
-					<div class="container">
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Skill</th>
-										<th>Language</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Cook</td>
-										<td>French</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td>German</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td></td>
-										<td>Greek</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col">
-							<p>Problems:</p>
-							<ul>
-								<li>Can Mr. Smith cook French cuisine and type in German?</li>
-								<li>What can Mr. Smith do in Greek?</li>
-								<li>What if Mr. Smith forgets German?</li>
-							</ul>
-						</div>					
-					</div>	
-				</section>
-				
-				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>Bad Solution #3:  Minimal (with repetition)</h3>
-					
-					<div class="container">
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Skill</th>
-										<th>Language</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Cook</td>
-										<td>French</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td>German</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td>Greek</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col">
-							<p>Problems:</p>
-							<ul>
-								<li>Can Mr. Smith cook French cuisine and type in German and Greek?</li>
-								<li>What if Mr. Smith forgets German?</li>
-								<li>What if Mr. Smith forgets how to type?</li>
-								<li>What if Mr. Smith forgets French?</li>
-							</ul>
-						</div>					
-					</div>	
-				</section>
-				
-				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>Bad Solution #4:  Unrestricted</h3>
-					
-					<div class="container">
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Skill</th>
-										<th>Language</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Cook</td>
-										<td>French</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td></td>
-										<td>German</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-										<td>Greek</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col">
-							<p>Problems:</p>
-							<ul>
-								<li>How do we even understand this data?</li>
-								<li>We have NULL values, repetition, and confusing combinations all at the same time</li>
-							</ul>
-						</div>					
-					</div>	
-				</section>
-				
-				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>Good Solution</h3>
-					
-					<div class="container">
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Skill</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>Cook</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Type</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col">
-							<table>
-								<thead>
-									<tr>
-										<th>Employee</th>
-										<th>Language</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Smith</td>
-										<td>French</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>German</td>
-									</tr>
-									<tr>
-										<td>Smith</td>
-										<td>Greek</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
 					<ul>
-						<li class="fragment"><code>{ E, S, L }</code> was good enough for BCNF (<code>{ E, S, L }</code> was the candidate key) but not good enough for us.</li>
-						<li class="fragment">The join dependency <code>*{ {E, S}, {E, L} }</code> needed to be broken out.</li>
+					  <li>Needing to have multiple "copies" of the same record--Unnamed Future Album need one row per artist * country, but what happens if we miss one of these?</li>
+					  <li>Any update likely needs to update multiple rows</li>
+					  <li>Any delete operation likely needs to delete multiple rows</li>
 					</ul>
 				</section>
 				
@@ -1549,12 +1536,14 @@
 				<section data-background-image="presentation/assets/background/jars.jpg" data-background-opacity="0.2">
 					<h3>An Example</h3>
 					
-					<p>Suppose we have a relvar <code>{ ProductKey, ProductName, ProductColor, ProductWeight, StorageCity }</code>.  Furthermore, our natural key is <code>ProductKey</code>.  This relvar is in 5NF (BCNF + non-composite key) and can be made 6NF in the following way:</p>
+					<p>Suppose we have a relvar <code>{ AlbumID, AlbumName, Runtime, ReleaseYear, ArtistID, ArtistID2, GenreID, GenreID2, GenreID3 }</code>.  Furthermore, our natural key is <code>AlbumID</code>.  This relvar is in 5NF (BCNF + non-composite key) and can be made 6NF in the following way:</p>
 					
-					<p><code>{ ProductKey, ProductName }</code></p>
-					<p><code>{ ProductKey, ProductColor }</code></p>
-					<p><code>{ ProductKey, ProductWeight }</code></p>
-					<p><code>{ ProductKey, StorageCity }</code></p>
+					<p><code>{ AlbumID, AlbumName }</code></p>
+					<p><code>{ AlbumID, Runtime }</code></p>
+					<p><code>{ AlbumID, ReleaseYear }</code></p>
+					<p><code>...</code></p>
+					<p><code>{ AlbumID, GenreID2 } </code></p>
+					<p><code>{ AlbumID, GenreID3 } </code></p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/monkey-thinking.jpg" data-background-opacity="0.2">
@@ -1565,40 +1554,43 @@
 					<ul>
 						<li>If an attribute always has a value, it's better to cluster these attributes together.</li>
 						<li>If an attribute may be missing, it might be better to break it out into 6NF (to avoid NULL).</li>
+						<li>If an attribute is part of a "nested set," we can unpivot these into one table.</li>
 					</ul>
 					
-					<p>Suppose we might not always have product weight.  Then we'd have:</p>
+					<p>Suppose we might not always have runtime and we want to unpivot artists and genres (assuming there is no 'order' to artists or genres).  Then we'd have:</p>
 					
-					<p><code>{ ProductKey, ProductName, ProductColor, StorageCity }</code></p>
-					<p><code>{ ProductKey, ProductWeight }</code></p>
+					<p><code>{ AlbumID, AlbumName, ReleaseYear }</code></p>
+					<p><code>{ AlbumID, Runtime }</code></p>
+					<p><code>{ AlbumID, ArtistID }</code></p>
+					<p><code>{ AlbumID, GenreID }</code></p>
 				</section>
 				
 				<section data-background-image="presentation/assets/background/time.jpg" data-background-opacity="0.2">
 					<h3>Do We Need 6NF?</h3>
 					
-					<p>6NF works best with <strong>intervals</strong> of data.  Usually this is temporal data.  Example:</p>
+					<p>6NF also helps us work with <strong>intervals</strong> of data.  Usually this is temporal data.  Example of <code>Tour</code>:</p>
 					
 					<table>
 						<thead>
 							<tr>
-								<th>SupplierKey</th>
+								<th>HeadlinerArtist</th>
 								<th>City</th>
 								<th>Interval</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Supplier1</td>
+								<td>Bad Religion</td>
 								<td>London</td>
 								<td>D4:D8</td>
 							</tr>
 							<tr>
-								<td>Supplier2</td>
+								<td>Horrorpops</td>
 								<td>Paris</td>
 								<td>D3:D3</td>
 							</tr>
 							<tr>
-								<td>Supplier2</td>
+								<td>Horrorpops</td>
 								<td>Athens</td>
 								<td>D5:D10</td>
 							</tr>
@@ -1614,41 +1606,41 @@
 					<table>
 						<thead>
 							<tr>
-								<th>SupplierKey</th>
+								<th>HeadlinerArtist</th>
+								<th>WarmupArtist</th>
 								<th>City</th>
-								<td>Assistants</th>
 								<th>Interval</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Supplier1</td>
+								<td>Bad Religion</td>
+								<td>Rad Beligion</td>
 								<td>London</td>
-								<td>4</td>
 								<td>D1:D8</td>
 							</tr>
 							<tr>
-								<td>Supplier1</td>
+								<td>Bad Religion</td>
+								<td>The Deviates</td>
 								<td>London</td>
-								<td>5</td>
 								<td>D9:D14</td>
 							</tr>
 							<tr>
-								<td>Supplier1</td>
+								<td>Bad Religion</td>
+								<td>The Deviates</td>
 								<td>Paris</td>
-								<td>5</td>
 								<td>D15:D17</td>
 							</tr>
 							<tr>
-								<td>Supplier2</td>
+								<td>Horrorpops</td>
+								<td>The Chop Tops</td>
 								<td>Athens</td>
-								<td>3</td>
 								<td>D1:D17</td>
 							</tr>
 							<tr>
-								<td>Supplier2</td>
+								<td>Horrorpops</td>
+								<td>Nekromantix</td>
 								<td>Athens</td>
-								<td>4</td>
 								<td>D18:D18</td>
 							</tr>
 						</tbody>
@@ -1665,24 +1657,24 @@
 							<table>
 								<thead>
 									<tr>
-										<th>SupplierKey</th>
+										<th>HeadlinerArtist</th>
 										<th>City</th>
 										<th>Interval</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Supplier1</td>
+										<td>BadReligion</td>
 										<td>London</td>
 										<td>D1:D14</td>
 									</tr>
 									<tr>
-										<td>Supplier1</td>
+										<td>BadReligion</td>
 										<td>Paris</td>
 										<td>D15:D17</td>
 									</tr>
 									<tr>
-										<td>Supplier2</td>
+										<td>Horrorpops</td>
 										<td>Athens</td>
 										<td>D1:D18</td>
 									</tr>
@@ -1693,37 +1685,72 @@
 							<table>
 								<thead>
 									<tr>
-										<th>SupplierKey</th>
-										<td>Assistants</th>
+										<th>HeadlinerArtist</th>
+										<td>WarmupArtist</th>
 										<th>Interval</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Supplier1</td>
-										<td>4</td>
+										<td>Bad Religion</td>
+										<td>Rad Beligion</td>
 										<td>D1:D8</td>
 									</tr>
 									<tr>
-										<td>Supplier1</td>
-										<td>5</td>
+										<td>Bad Religion</td>
+										<td>The Deviates</td>
 										<td>D9:D17</td>
 									</tr>
 									<tr>
-										<td>Supplier2</td>
-										<td>3</td>
+										<td>Horrorpops</td>
+										<td>The Chop Tops</td>
 										<td>D1:D17</td>
 									</tr>
 									<tr>
-										<td>Supplier2</td>
-										<td>4</td>
+										<td>Horrorpops</td>
+										<td>Nekromantix</td>
 										<td>D18:D18</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
-					<p>To bring these back together, unpack on <code>Interval</code>, join together elements, and re-pack on <code>Interval</code>.  This is a gaps & islands problem!</p>
+					<p>To bring these back together, unpack on <code>Interval</code>, join together elements, and re-pack on <code>Interval</code>.</p>
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Unpacking and Re-Packing</h3>
+					
+					<img src="presentation/assets/image/6NF_Artist_City.png" />
+					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Unpacking and Re-Packing</h3>
+					
+					<img src="presentation/assets/image/6NF_Artist_Warmup.png" />
+					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Unpacking and Re-Packing</h3>
+					
+					<img src="presentation/assets/image/6NF_Block1.png" />
+					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Unpacking and Re-Packing</h3>
+					
+					<img src="presentation/assets/image/6NF_Block2.png" />
+					
+				</section>
+				
+				<section data-background-image="presentation/assets/background/traffic.jpg" data-background-opacity="0.2">
+					<h3>Unpacking and Re-Packing</h3>
+					
+					<img src="presentation/assets/image/6NF_Block3.png" />
+					
 				</section>
 				
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
